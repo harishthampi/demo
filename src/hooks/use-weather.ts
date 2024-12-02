@@ -7,23 +7,23 @@ const WEATHER_KEY = {
     reverseGeocode:(Coords:Coordinates) => ['reverseGeocode',Coords] as const
 }
 
-export function useWeather(coordinates:Coordinates){
+export function useWeather(coordinates:Coordinates|null){
    return useQuery({
     queryKey:WEATHER_KEY.weather(coordinates ?? {lat:0,lon:0}),
-    queryFn:() => weatherAPI.getCurrentData(coordinates),
+    queryFn:() => coordinates?weatherAPI.getCurrentData(coordinates):null,
    }) 
 }
 
-export function useForecast(coordinates:Coordinates){
+export function useForecast(coordinates:Coordinates|null){
     return useQuery({
      queryKey:WEATHER_KEY.forecast(coordinates ?? {lat:0,lon:0}),
-     queryFn:() => weatherAPI.getForecastData(coordinates),
+     queryFn:() => coordinates?weatherAPI.getForecastData(coordinates):null,
     }) 
 }
 
-export function useReverseGeocode(coordinates:Coordinates){
+export function useReverseGeocode(coordinates:Coordinates|null){
     return useQuery({
      queryKey:WEATHER_KEY.reverseGeocode(coordinates ?? {lat:0,lon:0}),
-     queryFn:() => weatherAPI.getGeoLocation(coordinates),
+     queryFn:() => coordinates?weatherAPI.getReverseLocation(coordinates):null,
     }) 
  }

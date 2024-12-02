@@ -1,14 +1,14 @@
 import { API_CONFIG } from "./config";
-import { Coordinates, CurrentWeather, ForecastWeather, geoLocation } from "./types";
+import type{ Coordinates, CurrentWeather, ForecastWeather, geoLocation } from "./types";
 
 class Weather{
 
     private createUrl(endpoint:string,params:Record<string,string|number>){
         const searchParams = new URLSearchParams({
-            ...params,
-            appid:API_CONFIG.API_KEY
+            appid:API_CONFIG.API_KEY,
+            ...params
         });
-        return `${endpoint}?${searchParams.toString}`
+        return `${endpoint}?${searchParams.toString()}`
     }
 
     private async fetchData<T>(url:string):Promise<T>{
@@ -19,11 +19,13 @@ class Weather{
         return response.json();
     }
     async getCurrentData({lat,lon}:Coordinates):Promise<CurrentWeather>{
-        const url = this.createUrl(`${API_CONFIG.BASE_URL}/weather`,{
-            lat:lat,
-            lon:lon,
-            units:'metric'
+        const url = this.createUrl(`${API_CONFIG.BASE_URL}weather`,{
+            lat:lat.toString(),
+            lon:lon.toString(),
+            units:'metric',
         });
+        console.log("url",lat,lon,url);
+        
         return this.fetchData<CurrentWeather>(url);
     }
     async getForecastData({lat,lon}:Coordinates):Promise<ForecastWeather>{
@@ -34,7 +36,7 @@ class Weather{
         })
         return this.fetchData<ForecastWeather>(url);
     }
-    async getGeoLocation({lat,lon}:Coordinates):Promise<geoLocation[]>{
+    async getReverseLocation({lat,lon}:Coordinates):Promise<geoLocation[]>{
         const url = this.createUrl(`${API_CONFIG.GEOCODING_URL}/reverse`,{
             lat:lat,
             lon:lon,
