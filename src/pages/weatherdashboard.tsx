@@ -1,7 +1,9 @@
 import CurrentWeatherCard from "@/components/CurrentWeatherCard";
+import { ForeCastData } from "@/components/ForeCastData";
 import HourlyForecast from "@/components/HourlyForecast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { WeatherDetails } from "@/components/WeatherDetails";
 import WeatherSkelton from "@/components/weatherSkelton";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import {
@@ -98,9 +100,15 @@ const WeatherDashboard = () => {
           <RefreshCw className={`w-4 h-4 ${weatherQuery.isFetching?"animate-spin":""}`}/>
         </Button>
       </div>
-      <div className="flex gap-2">
+      <div className="grid gap-6">
+        <div className=" flex flex-col lg:flex-row gap-4">
         <CurrentWeatherCard data={weatherQuery.data} locationName={locationName}/>
         <HourlyForecast data={forecastQuery.data} />
+        </div>
+        <div>
+          <WeatherDetails data={weatherQuery.data}/>
+          <ForeCastData data={forecastQuery.data}/>
+        </div>
       </div>
   </div>
    )
